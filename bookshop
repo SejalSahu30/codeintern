@@ -1,0 +1,119 @@
+#include<iostream>
+#include<string>
+
+using namespace std;
+
+class Book {
+public:
+    string title;
+    string author;
+    int year;
+    double price;
+
+    Book(string t, string a, int y, double p) : title(t), author(a), year(y), price(p) {}
+};
+
+int main() {
+    const int maxBooks = 100; 
+    Book* inventory[maxBooks]; 
+    int numBooks = 0; 
+    while (true) {
+        cout << "\nBookshop Inventory System Menu:\n";
+        cout << "1. Add Book\n";
+        cout << "2. Display All Books\n";
+        cout << "3. Search for a Book\n";
+        cout << "4. Exit\n";
+        cout << "Enter your choice: ";
+
+        int choice;
+        cin >> choice;
+
+        switch (choice) {
+            case 1: {
+                if (numBooks < maxBooks) {
+                    string title, author;
+                    int year;
+                    double price;
+
+                    cout << "Enter book title: ";
+                    cin.ignore();
+                    getline(cin, title);
+                    cout << "Enter author: ";
+                    getline(cin, author);
+                    cout << "Enter publication year: ";
+                    cin >> year;
+                    cout << "Enter price: ";
+                    cin >> price;
+
+                    inventory[numBooks] = new Book(title, author, year, price);
+                    numBooks++;
+
+                    cout << "Book added successfully.\n";
+                } else {
+                    cout << "Inventory is full. Cannot add more books.\n";
+                }
+                break;
+            }
+
+            case 2: {
+                if (numBooks == 0) {
+                    cout << "Inventory is empty.\n";
+                } else {
+                    cout << "Book Inventory:\n";
+                    for (int i = 0; i < numBooks; i++) {
+                        cout << "Title: " << inventory[i]->title << endl;
+                        cout << "Author: " << inventory[i]->author << endl;
+                        cout << "Year: " << inventory[i]->year << endl;
+                        cout << "Price: $" << inventory[i]->price << endl << endl;
+                    }
+                }
+                break;
+            }
+
+            case 3: {
+                if (numBooks == 0) {
+                    cout << "Inventory is empty. Cannot search for books.\n";
+                } else {
+                    string searchTitle;
+                    cout << "Enter the title to search for: ";
+                    cin.ignore();
+                    getline(cin, searchTitle);
+
+                    bool found = false;
+                    for (int i = 0; i < numBooks; i++) {
+                        if (inventory[i]->title == searchTitle) {
+                            cout << "Book Found:\n";
+                            cout << "Title: " << inventory[i]->title << endl;
+                            cout << "Author: " << inventory[i]->author << endl;
+                            cout << "Year: " << inventory[i]->year << endl;
+                            cout << "Price: $" << inventory[i]->price << endl;
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (!found) {
+                        cout << "Book not found.\n";
+                    }
+                }
+                break;
+            }
+
+            case 4: {
+                cout << "Exiting the program.\n";
+               
+                for (int i = 0; i < numBooks; i++) {
+                    delete inventory[i];
+                }
+                return 0;
+            }
+
+            default: {
+                cout << "Invalid choice. Please try again.\n";
+                break;
+            }
+        }
+    }
+
+    return 0;
+}
